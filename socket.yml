@@ -1,5 +1,10 @@
 name: histdata
 description: Socket providing a local copy of the historical Foreign Exchange data available on http://www.histdata.com/download-free-forex-data/?/ascii/1-minute-bar-quotes
+keywords:
+  - Foreign exchange
+  - forex
+  - historical data
+  - currency
 
 endpoints:
   populate:
@@ -14,17 +19,21 @@ endpoints:
         description: "The currency to sell."
         example: "NOK"
     response:
-      mimetype: text/plain
-      examples:
-        -
-          exit_code: 200
-          description: Success
-          example: Database successfully populated with 5,232,304 records.
-        -
-          exit_code: 400
-          description: Failed
-          example: Database population failed.
-  query:
+      success:
+        description: Success
+        parameters:
+          type: string
+          description: Message
+          example: "Database successfully populated with 5,232,304 records."
+      fail:
+        description: Failed
+        exit_code: 400
+        parameters:
+          message:
+            type: string
+            description: Message
+            example: Database population failed.
+  get-exchange-rate:
     description: Queries the local database for a currency exchange value in a historical moment in time.
     parameters:
       currency-buy:
@@ -40,17 +49,17 @@ endpoints:
         description: "UTC formatted timestamp"
         example: "2015-02-22T05:09:244327Z"
     response:
-      mimetype: text/plain
-      exchange-value:
-        type: string
-        description: "The exchange value (float with 4 digits) of the given currency pair in the particular given moment in time."
-        example: "9.7845"
-      examples:
-        -
-          exit_code: 200
-          description: Success
-          example: Exchange for EURNOK on 2015-02-22T05:09:244327Z was 9.7845
-        -
-          exit_code: 400
-          description: Failed
-          example: Database is empty. You must populate it with data first.
+      success:
+        description: Success
+        parameters:
+          type: string
+          description: "The exchange value (float with 4 digits) of the given currency pair in the particular given moment in time."
+          example: "9.7845"
+      fail:
+        description: Failed
+        exit_code: 400
+        parameters:
+          message:
+            type: string
+            description: Message
+            example: Could not find currency exchange for that date or currency pair
