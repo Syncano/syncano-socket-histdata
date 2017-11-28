@@ -1,0 +1,56 @@
+name: histdata
+description: Socket providing a local copy of the historical Foreign Exchange data available on http://www.histdata.com/download-free-forex-data/?/ascii/1-minute-bar-quotes
+
+endpoints:
+  populate:
+    description: Populates the local database with all the ForEx historical data for a given currency pair.
+    parameters:
+      currency-buy:
+        type: string
+        description: "The currency to buy."
+        example: "EUR"
+      currency-sell:
+        type: string
+        description: "The currency to sell."
+        example: "NOK"
+    response:
+      mimetype: text/plain
+      examples:
+        -
+          exit_code: 200
+          description: Success
+          example: Database successfully populated with 5,232,304 records.
+        -
+          exit_code: 400
+          description: Failed
+          example: Database population failed.
+  query:
+    description: Queries the local database for a currency exchange value in a historical moment in time.
+    parameters:
+      currency-buy:
+        type: string
+        description: "The currency to buy."
+        example: "EUR"
+      currency-sell:
+        type: string
+        description: "The currency to sell."
+        example: "NOK"
+      timestamp:
+        type: datetime
+        description: "UTC formatted timestamp"
+        example: "2015-02-22T05:09:244327Z"
+    response:
+      mimetype: text/plain
+      exchange-value:
+        type: string
+        description: "The exchange value (float with 4 digits) of the given currency pair in the particular given moment in time."
+        example: "9.7845"
+      examples:
+        -
+          exit_code: 200
+          description: Success
+          example: Exchange for EURNOK on 2015-02-22T05:09:244327Z was 9.7845
+        -
+          exit_code: 400
+          description: Failed
+          example: Database is empty. You must populate it with data first.
